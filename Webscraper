@@ -1,0 +1,19 @@
+# First import Scrapy #
+import scrapy
+
+# then create a custom spider class and your target for your spider to crawl #
+
+class ReviewSpider(scrapy.Spider)
+    name = "Amazon"
+    start_urls = [
+        'https://www.amazon.com/s?k=dumbbells+adjustable+weight&crid=1NPQO4ZVHAK3B&sprefix=dumbbells+%2Caps%2C86&ref=nb_sb_ss_mission-aware-v1_2_10'
+    ]
+
+# Explanation for the code here #
+
+def parse (self, response)
+    page = response.url
+    title 
+    yield 
+
+# Explanation for the code here #
