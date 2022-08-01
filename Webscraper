@@ -16,3 +16,8 @@ def parse (self, response):
     yield = {'review_text' : body}
     
 # Explanation for the code here #
+
+# RUN THIS IN THE TERMINAL: scrapy crawl Amazon #
+
+Need to watch a tut and get a selector gadget
+
