@@ -1,23 +1,59 @@
-# First import Scrapy #
+# Some tools and stuff that I'm using: #
+    # Using the Pycharm IDE #
+    # Using the Scrapy and Scrapy-Proxy-Pool (1.7) library #
+    # Language: Python #
+    
+
+# The Spider #
+import scrapy
+from ..items import AmazonreviewsItem
+
+class AmazonSpiderSpider(scrapy.Spider):
+    name = 'Amazon'
+    start_urls = ['https://www.amazon.com/Bowflex-SelectTech-Adjustable-Dumbbells-Pair/dp/B001ARYU58/ref=sr_1_5?crid=1NPQO4ZVHAK3B&keywords=dumbbells+adjustable+weight&qid=1659811708&sprefix=dumbbells+%2Caps%2C86&sr=8-5&ufe=app_do%3Aamzn1.fos.c3015c4a-46bb-44b9-81a4-dc28e6d374b3']
+
+    def parse(self, response):
+        items = AmazonreviewsItem()
+
+        product_name = response.css(".a-text-ellipsis .a-link-normal::text").extract()
+        product_review_num = response.css(".review-rating").css("::text").extract()
+        product_review_date = response.css(".review-date").css("::text").extract()
+        review_author = response.css(".a-profile-name").css("::text").extract()
+
+        items['product_name'] = product_name
+        items['product_review_num'] = product_review_num
+        items['product_review_date'] = product_review_date
+        items['review_author'] = review_author
+
+        yield items
+
+# Items bin #
+
 import scrapy
 
-# then create a custom spider class and your target for your spider to crawl #
 
-class ReviewSpider(scrapy.Spider):
-    name = "Amazon"
-    start_urls = [
-        'https://www.amazon.com/s?k=dumbbells+adjustable+weight&crid=1NPQO4ZVHAK3B&sprefix=dumbbells+%2Caps%2C86&ref=nb_sb_ss_mission-aware-v1_2_10'
-    ]
-
-# Explanation for the code here #
-
-def parse (self, response):
-    review = response.css('body').extract
-    yield = {'review_text' : body}
+class AmazonreviewsItem(scrapy.Item):
+    product_name = scrapy.Field()
+    product_review_num = scrapy.Field()
+    product_review_date = scrapy.Field()
+    review_author = scrapy.Field()
     
-# Explanation for the code here #
+# Settings #
 
-# RUN THIS IN THE TERMINAL: scrapy crawl Amazon #
+BOT_NAME = 'amazonreviews'
 
-Need to watch a tut and get a selector gadget
+SPIDER_MODULES = ['amazonreviews.spiders']
+NEWSPIDER_MODULE = 'amazonreviews.spiders'
 
+ROBOTSTXT_OBEY = True
+PROXY_POOL_ENABLED = True
+
+DOWNLOADER_MIDDLEWARES = {
+    # ...
+    'scrapy_proxy_pool.middlewares.ProxyPoolMiddleware': 610,
+    'scrapy_proxy_pool.middlewares.BanDetectionMiddleware': 620,
+    # ...
+}
+
+# Command for the terminal #
+scrapy crawl Amazon
